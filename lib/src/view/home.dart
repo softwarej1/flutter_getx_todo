@@ -45,7 +45,7 @@ class HomeView extends GetView<HomeController> {
 
   Widget _create() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 10.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 30.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -65,8 +65,12 @@ class HomeView extends GetView<HomeController> {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-            child: ElevatedButton(
-                onPressed: controller.create, child: const Icon(Icons.send)),
+            child: SizedBox(
+              height: 50,
+              width: 70,
+              child: ElevatedButton(
+                  onPressed: controller.create, child: const Icon(Icons.add)),
+            ),
           )
         ],
       ),
@@ -114,7 +118,9 @@ class HomeView extends GetView<HomeController> {
                     ),
               title: Text(
                 todoModel.todo,
+                textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontSize: 20,
                   decoration: todoModel.isDone!
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
@@ -122,6 +128,7 @@ class HomeView extends GetView<HomeController> {
               ),
               subtitle: Text(
                 DateFormat('yyyy-MM-dd HH:mm').format(dateTime),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   decoration: todoModel.isDone!
                       ? TextDecoration.lineThrough
