@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_todo/src/controller/home_controller.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -9,7 +10,8 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Firebase getx CREUD'),
+        centerTitle: true,
+        title: const Text('오늘의 할 일'),
         actions: [
           IconButton(
               onPressed: controller.signOut, icon: const Icon(Icons.logout))
@@ -18,6 +20,7 @@ class HomeView extends GetView<HomeController> {
       body: Obx(
         () => Column(
           children: [
+            _date(),
             _create(),
             _todoList(),
           ],
@@ -26,18 +29,47 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _create() {
-    return Row(
-      children: [
-        SizedBox(
-          width: 250,
-          child: TextField(
-            controller: controller.createController,
-          ),
+  Widget _date() {
+    DateTime now = DateTime.now();
+    String formattedDate = ' ${now.month}월 ${now.day}일';
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 40),
+      child: Center(
+        child: Text(
+          formattedDate,
+          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
-        ElevatedButton(
-            onPressed: controller.create, child: const Icon(Icons.send))
-      ],
+      ),
+    );
+  }
+
+  Widget _create() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.white,
+                  width: 2.0,
+                ),
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: TextField(
+                controller: controller.createController,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+            child: ElevatedButton(
+                onPressed: controller.create, child: const Icon(Icons.send)),
+          )
+        ],
+      ),
     );
   }
 
@@ -47,28 +79,56 @@ class HomeView extends GetView<HomeController> {
         itemCount: controller.todos.length,
         itemBuilder: (context, index) {
           final todoModel = controller.todos[index];
-          return ListTile(
-            leading: (todoModel.isDone!)
-                ? GestureDetector(
-                    onTap: () {
-                      controller.deleteTodo(todoModel.id!);
-                    },
-                    child: const Icon(
-                      Icons.check,
-                      color: Colors.green,
+          final milliseconds = todoModel.time!.millisecondsSinceEpoch;
+          final dateTime = DateTime.fromMillisecondsSinceEpoch(milliseconds);
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            height: 70,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: ListTile(
+              trailing: (todoModel.isDone!)
+                  ? GestureDetector(
+                      onTap: () {
+                        controller.deleteTodo(todoModel.id!);
+                      },
+                      child: const Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        controller.updateTodo(todoModel.id!);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
                     ),
-                  )
-                : GestureDetector(
-                    onTap: () {
-                      controller.updateTodo(todoModel.id!);
-                    },
-                    child: const Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-                  ),
-            title: Text(todoModel.todo),
-            subtitle: Text(todoModel.time.toString()),
+              title: Text(
+                todoModel.todo,
+                style: TextStyle(
+                  decoration: todoModel.isDone!
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
+              subtitle: Text(
+                DateFormat('yyyy-MM-dd HH:mm').format(dateTime),
+                style: TextStyle(
+                  decoration: todoModel.isDone!
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
+            ),
           );
         },
       ),

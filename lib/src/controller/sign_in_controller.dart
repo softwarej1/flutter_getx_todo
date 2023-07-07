@@ -18,16 +18,27 @@ class SignInController extends GetxController {
   void validate() {
     if (_email.value.text.trim().isEmpty ||
         _password.value.text.trim().isEmpty) {
+      Get.snackbar(
+        '에러',
+        '모든 필드를 입력하세요.',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
       return;
     }
     _isLoading(true);
+
     AuthHandler.signIn(email.value.text.trim(), password.value.text.trim())
-        .then((value) {
-      _isLoading(false);
-      Future.delayed(const Duration(seconds: 2)).then((value) {
-        Get.back();
-      });
-    });
+        .then(
+      (value) {
+        _isLoading(false);
+        Future.delayed(const Duration(seconds: 2)).then(
+          (value) {
+            Get.back();
+          },
+        );
+      },
+    );
   }
 
   void moveToRegister() {

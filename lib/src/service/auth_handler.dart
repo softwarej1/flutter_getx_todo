@@ -28,8 +28,12 @@ class AuthHandler extends GetxService {
     try {
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } catch (e) {
-      // ignore: avoid_print
-      print('에러');
+      Get.snackbar(
+        '에러',
+        '로그인에 실패했습니다.',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 3),
+      );
     }
   }
 

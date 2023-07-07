@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_getx_todo/src/components/gredient_button.dart';
+import 'package:flutter_getx_todo/src/components/input_field.dart';
 import 'package:flutter_getx_todo/src/controller/sign_in_controller.dart';
 import 'package:get/get.dart';
 
@@ -31,12 +32,13 @@ class SignInView extends GetView<SignInController> {
     return const Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
       child: Align(
-          alignment: Alignment.bottomLeft,
-          child: Text('Sign In',
-              style: TextStyle(
-                  fontFamily: 'Ubuntu',
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold))),
+        alignment: Alignment.center,
+        child: Text(
+          'Todo List',
+          style: TextStyle(
+              fontSize: 45, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 
@@ -45,33 +47,30 @@ class SignInView extends GetView<SignInController> {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
-          child: TextField(
+          child: InputField(
             controller: controller.email,
-            decoration: const InputDecoration(
-              hintText: 'E-mail',
-              prefixIcon: Icon(Icons.email),
-            ),
+            hintText: '이메일',
+            prefixIcon: const Icon(Icons.email),
+            obscure: false,
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
-          child: TextField(
+          child: InputField(
             controller: controller.password,
-            decoration: const InputDecoration(
-              hintText: 'password',
-              prefixIcon: Icon(Icons.lock),
-            ),
-            obscureText: true,
-            keyboardType: TextInputType.text,
+            hintText: '비밀번호',
+            prefixIcon: const Icon(Icons.lock),
+            obscure: true,
+            type: TextInputType.text,
           ),
-        )
+        ),
       ],
     );
   }
 
   Widget _button() {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 24.0),
       child: Obx(
         () => GradientButton(
             onPressed: controller.validate,
@@ -86,8 +85,8 @@ class SignInView extends GetView<SignInController> {
     return TextButton(
       onPressed: controller.moveToRegister,
       child: const Text(
-        'Sign Up',
-        style: TextStyle(fontSize: 15),
+        '회원가입',
+        style: TextStyle(fontSize: 15, color: Colors.white),
       ),
     );
   }
@@ -102,7 +101,7 @@ class SignInView extends GetView<SignInController> {
 
   Widget _loginText() {
     return const Text(
-      'Login',
+      '로그인',
       style: TextStyle(fontFamily: 'Ubuntu', fontSize: 24, color: Colors.white),
     );
   }
